@@ -33,10 +33,19 @@ class Snek(object):
 
     def sonar(self, board: Board):
         new_board = self.draw_snek(board)
-        head = self.snek[0]
-        res = map(sum,[zip(head,m) for m in [[0,1], [0,-1], [1,0], [-1,0]]])
-        sonar = map(new_board.is_cell_available, *res)
+        movements = self.possible_movements()
+        sonar = []
+        for m in movements:
+            if new_board.is_cell_available(*movements[m]):
+                sonar.append(m)
         return sonar
+
+    def possible_movements(self):
+        head = self.snek[0]
+        movements = Snek.movements.copy()
+        for m in movements.keys():
+            movements[m] = list(map(sum, zip(head,movements[m])))
+        return movements
 
 
     def draw_snek(self, board: Board):
