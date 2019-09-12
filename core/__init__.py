@@ -26,7 +26,7 @@ class Board(object):
 
 
 class Snek(object):
-    movements = {"R": [0, 1], "D": [0, 1], "L": [0, -1], "U": [0, -1]}
+    movements = {"R": [1, 0], "D": [0, 1], "L": [-1, 0], "U": [0, -1]}
 
     def __init__(self, snek: list):
         self.snek = snek
