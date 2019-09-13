@@ -31,7 +31,7 @@ class Snek(object):
         self.snek = snek
 
     def sonar(self, board: Board):
-        new_board = self.draw_snek(board)
+        new_board = self.available_cells(board)
         movements = self.possible_movements()
         sonar = []
         for m in movements:
@@ -50,9 +50,10 @@ class Snek(object):
         return movements
 
 
-    def draw_snek(self, board: Board):
+    def available_cells(self, board: Board):
         new_board = board.copy()
-        for body in self.snek:
+        for i in range(len(self.snek)-1):
+            body = self.snek[i]
             new_board.draw_block(*body)
         return new_board
     
@@ -82,9 +83,6 @@ class Game(object):
 
     def copy(self):
         return Game([self.board.width, self.board.heigth], self.snek.snek)
-    
-    def draw(self):
-        pass
     
 
 
