@@ -5,21 +5,20 @@ class Board(object):
     def __init__(self, width: int, heigth: int):
         self.width = width
         self.heigth = heigth
-        self.board = [[True for column in heigth] for row in width]
+        self.board = [[True for column in range(heigth)] for row in range(width)]
 
     def draw_block(self, x, y):
-        # TODO: Add exception out of  bounds
+        if x < 0 or y <0:
+            raise IndexError(f"Combination of x,y:{x},{y} out of range.")
         self.board[x][y] = False
     
     def get_cell(self, x, y):
-        # TODO: Add exception out of  bounds
+        if x < 0 or y <0:
+            raise IndexError(f"Combination of x,y:{x},{y} out of range.")
         return self.board[x][y]
 
     def is_cell_available(self, x, y):
-        try:
-            return self.board[x][y]
-        except Exception:
-            return False
+            return self.get_cell(x, y)
         
     def copy(self):
         return Board(self.width, self.heigth)
@@ -36,8 +35,11 @@ class Snek(object):
         movements = self.possible_movements()
         sonar = []
         for m in movements:
-            if new_board.is_cell_available(*movements[m]):
-                sonar.append(m)
+            try:
+                if new_board.is_cell_available(*movements[m]):
+                    sonar.append(m)
+            except IndexError:
+                pass
         return sonar
 
     def possible_movements(self):
@@ -55,13 +57,13 @@ class Snek(object):
         return new_board
     
     def move_snek(self, direction: str, board: Board):
-        if direction in Snek.movements.keys():
+        if direction not in Snek.movements.keys():
             raise Exception(f"Movement \"{direction}\" unknown.")
         if direction not in self.sonar(board):
-            raise Exception(f"Can't move \"{direction}\", going out of bounds!")
+            raise Exception(f"Can't move \"{direction}\", there is something bloking you!!!")
         head = self.snek[0]
         head = list(map(sum,zip(head, Snek.movements[direction])))
-        self.snek = head + self.snek[:-1]
+        self.snek = [head] + self.snek[:-1]
 
     
 
@@ -71,5 +73,11 @@ class Game(object):
     def __init__(self, board: list, snek: list):
         self.board = Board(*board)
         self.snek = Snek(snek)
+
+    def move_snek(self, direction):
+        self.snek.move_snek(direction, self.board)
+
+    def draw(self):
+        pass
     
     
