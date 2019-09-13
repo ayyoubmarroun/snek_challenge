@@ -77,7 +77,31 @@ class Game(object):
     def move_snek(self, direction):
         self.snek.move_snek(direction, self.board)
 
+    def movements(self):
+        return self.snek.sonar(self.board)
+
+    def copy(self):
+        return Game([self.board.width, self.board.heigth], self.snek.snek)
+    
     def draw(self):
         pass
     
+
+
+def numberOfAvailableDifferentPaths(board, snake, depth):
+    game = Game(board, snake)
+    return available_paths(game, depth)
     
+
+def available_paths(game: Game, depth):
+    total_paths = 0
+    if depth == 0:
+        return 0
+    if depth == 1:
+        return len(game.movements())
+    
+    for move in game.movements():
+        game_copy = game.copy()
+        game_copy.move_snek(move)
+        total_paths += available_paths(game_copy, depth - 1)
+    return total_paths
