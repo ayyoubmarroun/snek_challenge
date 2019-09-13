@@ -5,8 +5,15 @@ class Board(object):
     def __init__(self, width: int, heigth: int):
         self.width = width
         self.heigth = heigth
-        self.board = [[True for column in range(heigth)] for row in range(width)]
+        self._board = None
 
+
+    @property
+    def board(self):
+        if not self._board:
+            self._board = [[True for column in range(self.heigth)] for row in range(self.width)]
+        return self._board
+    
     def draw_block(self, x, y):
         if x < 0 or y <0:
             raise IndexError(f"Combination of x,y:{x},{y} out of range.")
@@ -46,7 +53,7 @@ class Snek(object):
         head = self.snek[0]
         movements = Snek.movements.copy()
         for m in movements.keys():
-            movements[m] = list(map(sum, zip(head,movements[m])))
+            movements[m] = map(sum, zip(head,movements[m]))
         return movements
 
 
@@ -92,12 +99,11 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
     
 
 def available_paths(game: Game, depth):
-    total_paths = 0
+    if depth == 1:
+        return len(game.movements())  
     if depth == 0:
         return 0
-    if depth == 1:
-        return len(game.movements())
-    
+    total_paths = 0  
     for move in game.movements():
         game_copy = game.copy()
         game_copy.move_snek(move)
