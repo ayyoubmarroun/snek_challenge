@@ -7,25 +7,24 @@ class Board(object):
         self.heigth = heigth
         self._board = None
 
-
     @property
     def board(self):
         if not self._board:
             self._board = [[True for column in range(self.heigth)] for row in range(self.width)]
         return self._board
     
-    def draw_block(self, x, y):
+    def draw_block(self, x: int, y: int):
         if x < 0 or y <0:
             raise IndexError(f"Combination of x,y:{x},{y} out of range.")
         self.board[x][y] = False
     
-    def get_cell(self, x, y):
+    def get_cell(self, x: int, y: int):
         if x < 0 or y <0:
             raise IndexError(f"Combination of x,y:{x},{y} out of range.")
         return self.board[x][y]
 
-    def is_cell_available(self, x, y):
-            return self.get_cell(x, y)
+    def is_cell_available(self, x: int, y: int):
+            return 0<=x<self.width and 0<=y<self.heigth and self.board[x][y]
         
     def copy(self):
         return Board(self.width, self.heigth)
@@ -43,18 +42,16 @@ class Snek(object):
         sonar = []
         for m in movements:
             try:
-                if new_board.is_cell_available(*movements[m]):
-                    sonar.append(m)
+                if new_board.get_cell(*m[1]):
+                    sonar.append(m[0])
             except IndexError:
                 pass
         return sonar
 
     def possible_movements(self):
         head = self.snek[0]
-        movements = Snek.movements.copy()
-        for m in movements.keys():
-            movements[m] = map(sum, zip(head,movements[m]))
-        return movements
+        return [ (k, [head[0]+v[0], head[1] +v[1]]) 
+                    for k,v in Snek.movements.items()]
 
 
     def available_cells(self, board: Board):
@@ -70,8 +67,8 @@ class Snek(object):
         if direction not in self.sonar(board):
             raise Exception(f"Can't move \"{direction}\", there is something bloking you!!!")
         head = self.snek[0]
-        head = list(map(sum,zip(head, Snek.movements[direction])))
-        self.snek = [head] + self.snek[:-1]
+        move = Snek.movements[direction]
+        self.snek = [[head[0] + move[0], head[1] + move[1]]] + self.snek[:-1]
 
     
 
