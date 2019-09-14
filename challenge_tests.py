@@ -1,4 +1,3 @@
-
 import unittest
 from core import numberOfAvailableDifferentPaths
 
@@ -14,7 +13,7 @@ class TestSnekChallenge(unittest.TestCase):
 
         paths = numberOfAvailableDifferentPaths(board, snek, depth)
         self.assertEqual(result, paths, f"Result should be {result} instead of {paths}")
-        # print_results(n, board, snek, depth, paths)
+        print_results(n, board, snek, depth, paths)
 
     def test2(self):
         n = 2
@@ -25,7 +24,7 @@ class TestSnekChallenge(unittest.TestCase):
 
         paths = numberOfAvailableDifferentPaths(board, snek, depth)
         self.assertEqual(result, paths, f"Result should be {result} instead of {paths}")
-        # print_results(n, board, snek, depth, paths)
+        print_results(n, board, snek, depth, paths)
 
     def test3(self):
         n = 3
@@ -36,8 +35,7 @@ class TestSnekChallenge(unittest.TestCase):
 
         paths = numberOfAvailableDifferentPaths(board, snek, depth)
         self.assertEqual(result, paths, f"Result should be {result} instead of {paths}")
-        
-        # print_results(n, board, snek, depth, paths)
+        print_results(n, board, snek, depth, paths)
 
 def print_results(n, board, snek, depth, paths):
     print((f"Test {n}: \n\t- board: \"{board}\"\n\t- snek: \"{snek}\""
